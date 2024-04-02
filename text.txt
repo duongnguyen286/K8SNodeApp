@@ -1,0 +1,120 @@
+Windows PowerShell
+Copyright (C) Microsoft Corporation. All rights reserved.
+
+Install the latest PowerShell for new features and improvements! https://aka.ms/PSWindows
+
+PS C:\WINDOWS\system32> d:
+PS D:\> cd K8S
+PS D:\K8S> cd nodeapp_test
+PS D:\K8S\nodeapp_test> minikube status
+W0402 18:05:44.416140   22076 main.go:291] Unable to resolve the current Docker CLI context "default": context "default": context not found: open C:\Users\LENOVO\.docker\contexts\meta\37a8eec1ce19687d132fe29051dca629d164e2c4958ba141d5f4133a33f0688f\meta.json: The system cannot find the path specified.
+minikube
+type: Control Plane
+host: Stopped
+kubelet: Stopped
+apiserver: Stopped
+kubeconfig: Stopped
+
+PS D:\K8S\nodeapp_test> minikube start
+W0402 18:05:50.377983    6088 main.go:291] Unable to resolve the current Docker CLI context "default": context "default": context not found: open C:\Users\LENOVO\.docker\contexts\meta\37a8eec1ce19687d132fe29051dca629d164e2c4958ba141d5f4133a33f0688f\meta.json: The system cannot find the path specified.
+* minikube v1.32.0 on Microsoft Windows 11 Home Single Language 10.0.22631.3296 Build 22631.3296
+* Using the docker driver based on existing profile
+* Starting control plane node minikube in cluster minikube
+* Pulling base image ...
+E0402 18:05:53.251419    6088 cache.go:189] Error downloading kic artifacts:  failed to download kic base image or any fallback image
+* Restarting existing docker container for "minikube" ...
+* Preparing Kubernetes v1.28.3 on Docker 24.0.7 ...
+* Configuring bridge CNI (Container Networking Interface) ...
+* Verifying Kubernetes components...
+  - Using image gcr.io/k8s-minikube/storage-provisioner:v5
+  - Using image docker.io/kubernetesui/metrics-scraper:v1.0.8
+  - Using image docker.io/kubernetesui/dashboard:v2.7.0
+* Some dashboard features require the metrics-server addon. To enable all features please run:
+
+        minikube addons enable metrics-server
+
+
+* Enabled addons: storage-provisioner, default-storageclass, dashboard
+* Done! kubectl is now configured to use "minikube" cluster and "default" namespace by default
+PS D:\K8S\nodeapp_test> minikube status
+W0402 18:06:27.758010   21796 main.go:291] Unable to resolve the current Docker CLI context "default": context "default": context not found: open C:\Users\LENOVO\.docker\contexts\meta\37a8eec1ce19687d132fe29051dca629d164e2c4958ba141d5f4133a33f0688f\meta.json: The system cannot find the path specified.
+minikube
+type: Control Plane
+host: Running
+kubelet: Running
+apiserver: Running
+kubeconfig: Configured
+
+PS D:\K8S\nodeapp_test> kubectl get svc
+NAME         TYPE        CLUSTER-IP   EXTERNAL-IP   PORT(S)   AGE
+kubernetes   ClusterIP   10.96.0.1    <none>        443/TCP   3h55m
+PS D:\K8S\nodeapp_test> kubectl apply -f deployment.yml
+deployment.apps/nodeapp-deployment created
+PS D:\K8S\nodeapp_test> kubectl get deployment
+NAME                  READY   UP-TO-DATE   AVAILABLE   AGE
+kubernetes-bootcamp   1/1     1            1           3h18m
+nodeapp-deployment    0/1     1            0           16s
+PS D:\K8S\nodeapp_test> kubectl get deployment
+NAME                  READY   UP-TO-DATE   AVAILABLE   AGE
+kubernetes-bootcamp   1/1     1            1           3h18m
+nodeapp-deployment    0/1     1            0           50s
+PS D:\K8S\nodeapp_test> kubectl get pods
+NAME                                  READY   STATUS              RESTARTS        AGE
+kubernetes-bootcamp-f95c5b745-tnh2r   1/1     Running             1 (3h11m ago)   3h19m
+nodeapp-deployment-5bc944c9c7-b7gq8   0/1     ContainerCreating   0               70s
+PS D:\K8S\nodeapp_test> kubectl apply -f service.yml
+service/nodeapp-service created
+PS D:\K8S\nodeapp_test> kubectl get svc
+NAME              TYPE           CLUSTER-IP      EXTERNAL-IP   PORT(S)          AGE
+kubernetes        ClusterIP      10.96.0.1       <none>        443/TCP          3h58m
+nodeapp-service   LoadBalancer   10.106.66.172   <pending>     5000:31110/TCP   6s
+PS D:\K8S\nodeapp_test> minikube service nodeapp-service
+W0402 18:10:09.481512   14704 main.go:291] Unable to resolve the current Docker CLI context "default": context "default": context not found: open C:\Users\LENOVO\.docker\contexts\meta\37a8eec1ce19687d132fe29051dca629d164e2c4958ba141d5f4133a33f0688f\meta.json: The system cannot find the path specified.
+|-----------|-----------------|-------------|---------------------------|
+| NAMESPACE |      NAME       | TARGET PORT |            URL            |
+|-----------|-----------------|-------------|---------------------------|
+| default   | nodeapp-service |        5000 | http://192.168.58.2:31110 |
+|-----------|-----------------|-------------|---------------------------|
+
+X Exiting due to SVC_UNREACHABLE: service not available: no running pod for service nodeapp-service found
+*
+╭──────────────────────────────────────────────────────────────────────────────────────────────────────────────╮
+│                                                                                                              │
+│    * If the above advice does not help, please let us know:                                                  │
+│      https://github.com/kubernetes/minikube/issues/new/choose                                                │
+│                                                                                                              │
+│    * Please run `minikube logs --file=logs.txt` and attach logs.txt to the GitHub issue.                     │
+│    * Please also attach the following file to the GitHub issue:                                              │
+│    * - C:\Users\LENOVO\AppData\Local\Temp\minikube_service_5ee33914413ce754878ca95680aa72cce10cb820_0.log    │
+│                                                                                                              │
+╰──────────────────────────────────────────────────────────────────────────────────────────────────────────────╯
+
+PS D:\K8S\nodeapp_test> docker context ls
+NAME                TYPE                DESCRIPTION                               DOCKER ENDPOINT                             KUBERNETES ENDPOINT   ORCHESTRATOR
+default *           moby                Current DOCKER_HOST based configuration   npipe:////./pipe/docker_engine        
+desktop-linux       moby                Docker Desktop                            npipe:////./pipe/dockerDesktopLinuxEngine
+PS D:\K8S\nodeapp_test> kubectl apply -f nodeapp-deployment.yaml
+error: the path "nodeapp-deployment.yaml" does not exist
+PS D:\K8S\nodeapp_test> kubectl apply -f nodeapp-deployment.yml
+error: the path "nodeapp-deployment.yml" does not exist
+PS D:\K8S\nodeapp_test>  kubectl apply -f deployment.yml
+deployment.apps/nodeapp-deployment unchanged
+PS D:\K8S\nodeapp_test> kubectl get deployment
+NAME                  READY   UP-TO-DATE   AVAILABLE   AGE
+kubernetes-bootcamp   1/1     1            1           3h26m
+nodeapp-deployment    1/1     1            1           8m32s
+PS D:\K8S\nodeapp_test> minikube service nodeapp-service
+W0402 18:16:37.607795   22592 main.go:291] Unable to resolve the current Docker CLI context "default": context "default": context not found: open C:\Users\LENOVO\.docker\contexts\meta\37a8eec1ce19687d132fe29051dca629d164e2c4958ba141d5f4133a33f0688f\meta.json: The system cannot find the path specified.
+|-----------|-----------------|-------------|---------------------------|
+| NAMESPACE |      NAME       | TARGET PORT |            URL            |
+|-----------|-----------------|-------------|---------------------------|
+| default   | nodeapp-service |        5000 | http://192.168.58.2:31110 |
+|-----------|-----------------|-------------|---------------------------|
+* Starting tunnel for service nodeapp-service.
+|-----------|-----------------|-------------|------------------------|
+| NAMESPACE |      NAME       | TARGET PORT |          URL           |
+|-----------|-----------------|-------------|------------------------|
+| default   | nodeapp-service |             | http://127.0.0.1:54841 |
+|-----------|-----------------|-------------|------------------------|
+* Opening service default/nodeapp-service in default browser...
+! Because you are using a Docker driver on windows, the terminal needs to be open to run it.
